@@ -13,7 +13,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('App\Interfaces\IStoreService', 'App\Services\StoreServiceMySql');
+        $this->app->bind('App\Interfaces\Stores\StoreServiceInterface', 'App\Services\StoreServiceMySql');
         $this->app->bind('App\Interfaces\Items\ItemServiceInterface', 'App\Services\ItemServiceMySql');
     }
 

@@ -3,16 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreRequest;
-use App\Interfaces\IStoreService;
+use App\Interfaces\Stores\StoreServiceInterface;
 use Illuminate\Http\Request;
 
 class StoreController extends Controller
 {
 
-    private IStoreService $service;
+    private StoreServiceInterface $service;
 
     // Dependecy-Inversion
-    public function __construct(IStoreService $service)
+    public function __construct(StoreServiceInterface $service)
     {
         $this->service = $service;
     }

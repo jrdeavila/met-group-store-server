@@ -2,9 +2,10 @@
 
 namespace App\Http\Messages;
 
+use App\Interfaces\Stores\StoreDeletedMessageInterface;
 use Illuminate\Http\Response;
 
-class StoreDeletedMessage extends ActionMessage
+class StoreDeletedMessage extends ActionMessage implements StoreDeletedMessageInterface
 {
 
   public function message(): string

@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ItemController;
+use App\Http\Controllers\ItemRestoreController;
+use App\Http\Controllers\ItemTrashController;
 use App\Http\Controllers\StoreController;
 use App\Http\Controllers\StoreRestoreController;
 use App\Http\Controllers\StoreTrashController;
@@ -35,7 +37,7 @@ Route::prefix('item')->group(function () {
         ->parameters(['' => 'name'])
         ->scoped(['name' => 'string'])
         ->except('store');
+    Route::put('/{name:string}/trash', ItemTrashController::class);
+    Route::put('/{name:string}/restore', ItemRestoreController::class);
     Route::post('/{name:string}', [ItemController::class, 'store']);
-    Route::put('/{name:string}/trash', StoreTrashController::class);
-    Route::put('/{name:string}/restore', StoreRestoreController::class);
 });

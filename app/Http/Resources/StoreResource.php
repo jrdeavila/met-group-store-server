@@ -2,9 +2,10 @@
 
 namespace App\Http\Resources;
 
+use App\Interfaces\Stores\StoreResourceInterface;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class StoreResource extends JsonResource
+class StoreResource extends JsonResource implements StoreResourceInterface
 {
     /**
      * Transform the resource into an array.

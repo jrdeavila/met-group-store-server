@@ -2,9 +2,10 @@
 
 namespace App\Http\Messages;
 
+use App\Interfaces\Stores\StoreTrashedMessageInterface;
 use Illuminate\Http\Response;
 
-class StoreTrashedMessage extends ActionMessage
+class StoreTrashedMessage extends ActionMessage implements StoreTrashedMessageInterface
 {
 
   public function status(): int

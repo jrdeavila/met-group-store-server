@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Exceptions\Item\ItemExistException;
 use App\Exceptions\Item\ItemNotFoundException;
+use App\Exceptions\Item\ItemNotTrashedException;
 use App\Http\Messages\Item\ItemDeletedMessage;
 use App\Http\Messages\Item\ItemTrashedMessage;
 use App\Http\Requests\ItemRequest;
@@ -64,6 +65,8 @@ class ItemServiceMySql implements ItemServiceInterface
   public function update(string $name, ItemRequest $request): ItemResourceInterface
   {
     $item = $this->findItemByName($name);
+    $newName = $request->get('name');
+    if ($newName && $this->checkIfItemExist($newName) && $newName != $name) throw new ItemExistException();
     $item->update($request->all());
     return new ItemResource($item);
   }
@@ -71,13 +74,14 @@ class ItemServiceMySql implements ItemServiceInterface
   public function trash(string $name): ItemTrashedMessageInterface
   {
     $item = $this->findItemByName($name);
-    $item->trash();
+    $item->delete();
     return new ItemTrashedMessage();
   }
 
   public function restore(string $name): ItemResourceInterface
   {
     $item = $this->findItemTrashedByName($name);
+    \throw_unless($item->trashed(), ItemNotTrashedException::class);
     $item->restore();
     return new ItemResource($item);
   }

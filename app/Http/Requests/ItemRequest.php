@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use App\Exceptions\FormValidationException;
 use App\Exceptions\UserNotAuthorizedException;
+use App\Models\Item;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
@@ -27,15 +28,24 @@ class ItemRequest extends FormRequest
      */
     public function rules()
     {
+
+        $toggle = $this->method() === 'POST';
         return [
             'name' => [
                 'string',
-                Rule::unique('items', 'name')->ignore($this->id)
+                Rule::when($toggle, ['prohibited'])
             ],
-            'price' => 'required|numeric|regex:/^\d+(\.\d{1,2})?$/',
-            'store_id' => [
-                'required',
+            'price' => [
                 'numeric',
+                'regex:/^\d+(\.\d{1,2})?$/',
+                Rule::when(
+                    $toggle,
+                    ['required'],
+                ),
+            ],
+            'store_id' => [
+                'numeric',
+                Rule::when($toggle, ['required']),
                 Rule::exists('stores', 'id')
             ]
         ];

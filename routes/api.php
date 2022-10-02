@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Controllers\ItemController;
+use App\Http\Controllers\StoreController;
+use App\Http\Controllers\StoreRestoreController;
+use App\Http\Controllers\StoreTrashController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,6 +18,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::prefix('store')->group(function () {
+    Route::apiResource('/', StoreController::class)
+        ->parameters(['' => 'name'])
+        ->scoped(['name' => 'string'])
+        ->except('store');
+    Route::post('/{name:string}', [StoreController::class, 'store']);
+    Route::put('/{name:string}/trash', StoreTrashController::class);
+    Route::put('/{name:string}/restore', StoreRestoreController::class);
+});
+
+
+Route::prefix('item')->group(function () {
+    Route::apiResource('/', ItemController::class)
+        ->parameters(['' => 'name'])
+        ->scoped(['name' => 'string'])
+        ->except('store');
+    Route::post('/{name:string}', [ItemController::class, 'store']);
+    Route::put('/{name:string}/trash', StoreTrashController::class);
+    Route::put('/{name:string}/restore', StoreRestoreController::class);
 });

@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Exceptions;
 
-use Exception;
-use Illuminate\Http\Response;
+namespace App\Exceptions\Auth;
+
+use App\Exceptions\ApplicationException;
+use Illuminate\Http\Response as HttpResponse;
 
 class RegisterUserExistException extends ApplicationException
 {
@@ -11,7 +12,7 @@ class RegisterUserExistException extends ApplicationException
 
     public function status(): int
     {
-        return Response::HTTP_INTERNAL_SERVER_ERROR;
+        return HttpResponse::HTTP_BAD_REQUEST;
     }
     public function help(): string
     {
@@ -19,6 +20,6 @@ class RegisterUserExistException extends ApplicationException
     }
     public function error(): string
     {
-        return trans('exceptions.register_user_exist.error');
+        return trans('exception.register_user_exist.error');
     }
 }

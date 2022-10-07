@@ -9,16 +9,12 @@ use Tests\TestCase;
 class StoreTest extends TestCase
 {
     use RefreshDatabase;
-    /**
-     * A basic feature test example.
-     *
-     * @return void
-     */
+
 
     // Test Get Store Collection
     public function test_endpoint_get_store_collection()
     {
-        $response = $this->get('/api/store');
+        $response = $this->get(route('store.index'));
         $response->header('Content-Type', 'application/json');
 
         $response->assertStatus(200);
@@ -27,7 +23,7 @@ class StoreTest extends TestCase
     public function test_endpoint_get_store_item()
     {
         $json = $this->test_endpoint_create_store_item();
-        $response = $this->get('/api/store/' . $json['name']);
+        $response = $this->get(route('store.show', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -39,7 +35,7 @@ class StoreTest extends TestCase
     }
     public function test_endpoint_get_store_not_exist()
     {
-        $response = $this->get('/api/store/TestStore');
+        $response = $this->get(route('store.show', 'TestStore'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -47,7 +43,7 @@ class StoreTest extends TestCase
     // Test Create a new Store Item
     public function test_endpoint_create_store_item($name = 'TestStore')
     {
-        $response = $this->post('/api/store/' . $name);
+        $response = $this->post(route('store.create', $name));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(201);
         $response->assertJsonStructure([
@@ -62,7 +58,7 @@ class StoreTest extends TestCase
     public function test_endpoint_create_store_validate_exist()
     {
         $json = $this->test_endpoint_create_store_item();
-        $response = $this->post('/api/store/' . $json['name']);
+        $response = $this->post(route('store.create', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(422);
     }
@@ -71,7 +67,7 @@ class StoreTest extends TestCase
     public function test_endpoint_update_store_item()
     {
         $json = $this->test_endpoint_create_store_item();
-        $response = $this->put('/api/store/' . $json['name'], [
+        $response = $this->put(route('store.update', $json['name']), [
             'name' => 'NewTestStoreName',
         ]);
         $response->header('Content-Type', 'application/json');
@@ -89,7 +85,7 @@ class StoreTest extends TestCase
         $json2 = $this->test_endpoint_create_store_item('AnotherTestStore');
 
 
-        $response = $this->put('/api/store/' . $json1['name'], [
+        $response = $this->put(route('store.update', $json1['name']), [
             'name' => $json2['name'],
         ]);
         $response->header('Content-Type', 'application/json');
@@ -98,7 +94,7 @@ class StoreTest extends TestCase
 
     public function test_endpoint_update_store_not_exist()
     {
-        $response = $this->put('/api/store/TestStore', [
+        $response = $this->put(route('store.update', 'TestStore'), [
             'name' => 'AnotherTestStore',
         ]);
         $response->header('Content-Type', 'application/json');
@@ -109,14 +105,14 @@ class StoreTest extends TestCase
     public function test_endpoint_delete_store_item()
     {
         $json = $this->test_endpoint_create_store_item();
-        $response = $this->delete('/api/store/' . $json['name']);
+        $response = $this->delete(route('store.destroy', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
 
     public function test_endpoint_delete_store_not_found()
     {
-        $response = $this->delete('/api/store/TestStore');
+        $response = $this->delete(route('store.destroy', 'TestStore'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -124,13 +120,13 @@ class StoreTest extends TestCase
     public function test_endpoint_trash_store_item($name = 'TestStore')
     {
         $json = $this->test_endpoint_create_store_item($name);
-        $response = $this->put('/api/store/' . $json['name'] . '/trash');
+        $response = $this->put(route('store.trash', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
     public function test_endpoint_trash_store_not_exist()
     {
-        $response = $this->put('/api/store/TestStore/trash');
+        $response = $this->put(route('store.trash', 'TestStore'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -139,7 +135,7 @@ class StoreTest extends TestCase
     public function test_endpoint_restore_an_store_item($name = 'TestStore')
     {
         $this->test_endpoint_trash_store_item($name);
-        $response = $this->put('/api/store/' . $name . '/restore');
+        $response = $this->put(route('store.restore', $name));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
         $response->assertJsonStructure([
@@ -152,13 +148,13 @@ class StoreTest extends TestCase
     {
         $json = $this->test_endpoint_create_store_item();
 
-        $response = $this->put('/api/store/' . $json['name'] . '/restore');
+        $response = $this->put(route('store.restore', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(400);
     }
     public function test_endpoint_restore_an_store_not_exist()
     {
-        $response = $this->put('/api/store/TestStore/restore');
+        $response = $this->put(route('store.restore', 'TestStore'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }

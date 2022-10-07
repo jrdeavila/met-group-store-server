@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Messages;
+namespace App\Http\Messages\Store;
 
+use App\Http\Messages\ActionMessage;
 use App\Interfaces\Stores\StoreDeletedMessageInterface;
 use Illuminate\Http\Response;
 

@@ -15,6 +15,7 @@ class AppServiceProvider extends ServiceProvider
     {
         $this->app->bind('App\Interfaces\Stores\StoreServiceInterface', 'App\Services\StoreServiceMySql');
         $this->app->bind('App\Interfaces\Items\ItemServiceInterface', 'App\Services\ItemServiceMySql');
+        $this->app->bind('App\Interfaces\Auth\AuthServiceInterface', 'App\Services\AuthServiceMySql');
     }
 
     /**

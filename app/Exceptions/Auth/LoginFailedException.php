@@ -1,9 +1,10 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Auth;
 
-use Exception;
+use App\Exceptions\ApplicationException;
 use Illuminate\Http\Response;
+
 
 class LoginFailedException extends ApplicationException
 {
@@ -14,10 +15,10 @@ class LoginFailedException extends ApplicationException
     }
     public function help(): string
     {
-        return trans('auth.failed');
+        return trans('exception.login_failed.help');
     }
     public function error(): string
     {
-        return trans('auth.password');
+        return trans('exception.login_failed.error');
     }
 }

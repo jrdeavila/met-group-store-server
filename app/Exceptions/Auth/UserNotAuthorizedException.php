@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Auth;
 
+use App\Exceptions\ApplicationException;
 use Illuminate\Http\Response;
 
 class UserNotAuthorizedException extends ApplicationException

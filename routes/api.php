@@ -25,10 +25,11 @@ Route::prefix('store')->group(function () {
     Route::apiResource('/', StoreController::class)
         ->parameters(['' => 'name'])
         ->scoped(['name' => 'string'])
-        ->except('store');
-    Route::post('/{name:string}', [StoreController::class, 'store']);
-    Route::put('/{name:string}/trash', StoreTrashController::class);
-    Route::put('/{name:string}/restore', StoreRestoreController::class);
+        ->except('store')
+        ->names('store');
+    Route::post('/{name:string}', [StoreController::class, 'store'])->name('store.create');
+    Route::put('/{name:string}/trash', StoreTrashController::class)->name('store.trash');
+    Route::put('/{name:string}/restore', StoreRestoreController::class)->name('store.restore');
 });
 
 
@@ -36,8 +37,9 @@ Route::prefix('item')->group(function () {
     Route::apiResource('/', ItemController::class)
         ->parameters(['' => 'name'])
         ->scoped(['name' => 'string'])
-        ->except('store');
-    Route::put('/{name:string}/trash', ItemTrashController::class);
-    Route::put('/{name:string}/restore', ItemRestoreController::class);
-    Route::post('/{name:string}', [ItemController::class, 'store']);
+        ->except('store')
+        ->names('items');
+    Route::put('/{name:string}/trash', ItemTrashController::class)->name('items.trash');
+    Route::put('/{name:string}/restore', ItemRestoreController::class)->name('items.restore');
+    Route::post('/{name:string}', [ItemController::class, 'store'])->name('items.create');
 });

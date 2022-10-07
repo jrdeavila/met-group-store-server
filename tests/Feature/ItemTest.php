@@ -18,7 +18,7 @@ class ItemTest extends TestCase
     // Test Create a new Store Item
     private function test_endpoint_create_store_item($name = 'TestStore')
     {
-        $response = $this->post('/api/store/' . $name);
+        $response = $this->post(route('store.create', $name));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(201);
         $response->assertJsonStructure([
@@ -35,7 +35,7 @@ class ItemTest extends TestCase
     // Test Get Item Collection
     public function test_endpoint_get_item_collection()
     {
-        $response = $this->get('/api/item');
+        $response = $this->get(route('items.index'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
@@ -45,7 +45,7 @@ class ItemTest extends TestCase
     {
         $json = $this->test_endpoint_create_store_item($storeName);
         $id = $json['id'];
-        $response = $this->post('/api/item/' . $name, [
+        $response = $this->post(route('items.create', $name), [
             'price' => 12.4,
             'store_id' => $id
         ]);
@@ -63,7 +63,7 @@ class ItemTest extends TestCase
     public function test_endpoint_post_item_validate_exist()
     {
         $id = $this->test_endpoint_post_item()['id'];
-        $response = $this->post('/api/item/TestItem', [
+        $response = $this->post(route('items.create', 'TestItem'), [
             'price' => 12.4,
             'store_id' => $id
         ]);
@@ -73,7 +73,7 @@ class ItemTest extends TestCase
     public function test_endpoint_post_item_validate_name_field_prohibited()
     {
         $id = $this->test_endpoint_post_item()['id'];
-        $response = $this->post('/api/item/TestItem', [
+        $response = $this->post(route('items.create', 'TestItem'), [
             'price' => 12.4,
             'store_id' => $id,
             'name' => 'TestItem'
@@ -87,14 +87,14 @@ class ItemTest extends TestCase
     public function test_endpoint_get_item()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->get('/api/item/' . $json['name']);
+        $response = $this->get(route('items.show', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
 
     public function test_endpoint_get_item_not_exist()
     {
-        $response = $this->get('/api/item/TestItem');
+        $response = $this->get(route('items.show', 'TestItem'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -103,7 +103,7 @@ class ItemTest extends TestCase
     public function test_endpoint_update_item_price()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'price' => 50.22
         ]);
         $response->header('Content-Type', 'application/json');
@@ -112,7 +112,7 @@ class ItemTest extends TestCase
     public function test_endpoint_update_item_price_invalid_format()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'price' => "abcdef"
         ]);
         $response->header('Content-Type', 'application/json');
@@ -121,7 +121,7 @@ class ItemTest extends TestCase
     public function test_endpoint_update_item_name()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'name' => 'AnotherName'
         ]);
         $response->header('Content-Type', 'application/json');
@@ -132,7 +132,7 @@ class ItemTest extends TestCase
     {
         $json = $this->test_endpoint_post_item();
         $json2 = $this->test_endpoint_post_item('AnotherItem', "AnotherStore");
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'name' => $json2["name"]
         ]);
         $response->header('Content-Type', 'application/json');
@@ -143,7 +143,7 @@ class ItemTest extends TestCase
     {
         $json = $this->test_endpoint_post_item();
         $json2 = $this->test_endpoint_create_store_item('AnotherStore');
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'store_id' => $json2["id"]
         ]);
         $response->header('Content-Type', 'application/json');
@@ -153,7 +153,7 @@ class ItemTest extends TestCase
     public function test_endpoint_update_item_store_not_exist()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'], [
+        $response = $this->put(route('items.update', $json['name']), [
             'store_id' => 0,
         ]);
         $response->header('Content-Type', 'application/json');
@@ -163,14 +163,14 @@ class ItemTest extends TestCase
     public function test_endpoint_delete_an_item()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->delete('/api/item/' . $json['name']);
+        $response = $this->delete(route('items.destroy', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
 
     public function test_endpoint_delete_an_item_not_found()
     {
-        $response = $this->delete('/api/item/TestItem');
+        $response = $this->delete(route('items.destroy', 'TestItem'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -178,7 +178,7 @@ class ItemTest extends TestCase
     public function test_endpoint_trash_an_item()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'] . '/trash');
+        $response = $this->put(route('items.trash', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
         return $json;
@@ -187,7 +187,7 @@ class ItemTest extends TestCase
 
     public function test_endpoint_trash_an_item_not_found()
     {
-        $response = $this->put('/api/item/TestItem/trash');
+        $response = $this->put(route('items.trash', 'TestItem'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }
@@ -196,7 +196,7 @@ class ItemTest extends TestCase
     public function test_endpoint_restore_an_item()
     {
         $json = $this->test_endpoint_trash_an_item();
-        $response = $this->put('/api/item/' . $json['name'] . '/restore');
+        $response = $this->put(route('items.restore', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(200);
     }
@@ -204,13 +204,13 @@ class ItemTest extends TestCase
     public function test_endpoint_restore_an_item_not_trashed()
     {
         $json = $this->test_endpoint_post_item();
-        $response = $this->put('/api/item/' . $json['name'] . '/restore');
+        $response = $this->put(route('items.restore', $json['name']));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(400);
     }
     public function test_endpoint_restore_an_item_not_exist()
     {
-        $response = $this->put('/api/item/TestItem/restore');
+        $response = $this->put(route('items.restore', 'TestItem'));
         $response->header('Content-Type', 'application/json');
         $response->assertStatus(404);
     }

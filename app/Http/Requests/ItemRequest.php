@@ -3,8 +3,7 @@
 namespace App\Http\Requests;
 
 use App\Exceptions\FormValidationException;
-use App\Exceptions\UserNotAuthorizedException;
-use App\Models\Item;
+use App\Exceptions\Auth\UserNotAuthorizedException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;

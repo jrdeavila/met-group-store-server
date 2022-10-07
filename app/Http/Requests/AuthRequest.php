@@ -6,9 +6,8 @@ use App\Exceptions\FormValidationException;
 use App\Exceptions\Auth\UserNotAuthorizedException;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
-class StoreRequest extends FormRequest
+class AuthRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -17,7 +16,7 @@ class StoreRequest extends FormRequest
      */
     public function authorize()
     {
-        return $this->user();
+        return true;
     }
 
     /**
@@ -28,21 +27,18 @@ class StoreRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => [
-                'required',
-                'string',
-                Rule::unique('stores', 'name')->ignore($this->id)
-            ]
+            'username' => 'required|string',
+            'password' => 'required|string'
         ];
-    }
-
-    protected function failedValidation(Validator $validator)
-    {
-        throw new FormValidationException($validator);
     }
 
     protected function failedAuthorization()
     {
         throw new UserNotAuthorizedException();
+    }
+
+    protected function failedValidation(Validator $validator)
+    {
+        throw new FormValidationException($validator);
     }
 }

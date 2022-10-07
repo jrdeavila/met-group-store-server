@@ -1,9 +1,11 @@
 <?php
 
-namespace App\Exceptions;
+namespace App\Exceptions\Auth;
 
-use Exception;
+use App\Exceptions\ApplicationException;
 use Illuminate\Http\Response;
+
+
 
 class LoginUserNotExistException extends ApplicationException
 {
@@ -15,10 +17,10 @@ class LoginUserNotExistException extends ApplicationException
     }
     public function help(): string
     {
-        return trans('auth.login_user_not_exist.help');
+        return trans('exception.login_user_not_exist.help');
     }
     public function error(): string
     {
-        return trans('auth.login_user_not_exist.error');
+        return trans('exception.login_user_not_exist.error');
     }
 }

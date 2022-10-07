@@ -41,7 +41,7 @@ class ItemServiceMySql implements ItemServiceInterface
 
   public function get(): ItemCollectionInterface
   {
-    return new ItemCollection(Item::all());
+    return new ItemCollection(Item::latest()->get());
   }
 
   public function post(string $name, ItemRequest $request): ItemResourceInterface

@@ -1,66 +1,99 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Servidor de recursos API para Store App
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Es donde se aloja la logica backend del ultimo ejercicio planteado
+en la prueba de desarrollador. Que permite realizar las tareas crud
+de los modulos Stores e Items, ademas de un sistema de autenticacion
+de usuarios.
 
-## About Laravel
+Esta aplicación está desarrollada con Laravel-PHP, Laravel-Passport, Docker,
+Clean Arquitecture y buenas practicas de programacion para la creacion
+de un servicio de calidad y de facil mantenimiento.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Entorno de ejecucion
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Para poder correr el servidor, debemos tener instaladas las
+siguientes dependencias:
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+-   Docker
+-   PHP CLI
+-   node
+-   Composer
 
-## Learning Laravel
+Ademas, tenemos que asegurarnos de que el servicio de Docker
+este ejecutandose.
+En windows abrimos el entorno de Docker y nos aseguramos de que
+asi sea.
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+_Nota: Para el caso de Linux debemos ejecutar el siguiente comando_
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```
+sudo systemctl start docker
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 2000 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+_Esto ejecutará el servicio de docker en segundo plano_
 
-## Laravel Sponsors
+Luego debemos instalar las dependencias de node. Para ello, nos
+situamos en la raiz del proyecto y ejecutamos el siguiente comando.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+```
+npm install && npm run dev
+```
 
-### Premium Partners
+Instalamos Laravel-Sail.
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[Many](https://www.many.co.uk)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[OP.GG](https://op.gg)**
-- **[WebReinvent](https://webreinvent.com/?utm_source=laravel&utm_medium=github&utm_campaign=patreon-sponsors)**
-- **[Lendio](https://lendio.com)**
+```
+php artisan sail:install
+```
 
-## Contributing
+_Aqui escogemos a MySQL como base de datos_
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Instalamos las dependencias del proyecto.
 
-## Code of Conduct
+```
+sail composer install
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+Seguidamente corremos las migraciones.
 
-## Security Vulnerabilities
+```
+sail artisan migrate
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Y por ultimo registramos los clientes de passport.
+Para ello ejecutamos el siguiente comando.
 
-## License
+```
+sail artisan passport:install
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+_Esto hara que se guarden en la base de datos dos clientes
+de passport. El Personal Access Token y el Client Access Token
+respectivamente._
+
+En este punto solo debemos agregar o actualizar las variables
+de entorno `PERSONAL_ACCESS_CLIENT_SECRET` y `PERSONAL_ACCESS_CLIENT_ID`
+con la informacion previa.
+
+Y listo, ya podemos consumir los recursos del servidor de forma
+local `http://localhost`. En donde podemos usar los siguientes endpoints:
+
+| Endpoint                  | Metodos                        | Descripcion                                                               |
+| ------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
+| http://localhost/register | `POST`                         | Registra un nuevo usuario                                                 |
+| http://localhost/auth     | `POST`                         | Obtiene un token de acceso con las credenciales de un usuario registrado. |
+| http://localhost/store    | `GET`, `POST`,`PUT`, `DELETE`, | Crud de S                                                                 |
+
+tores.
+http://localhost/item | `GET`, `POST`,`PUT`, `DELETE`,| Crud de Items.
+
+## Features
+
+-   Laravel-PHP
+-   Docker
+-   Passport / OAuth2
+-   Arquitectura Limpia
+-   Principios SOLID
+
+## Authors
+
+-   [@jrdeavila](https://www.github.com/octokatherine)

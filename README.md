@@ -81,10 +81,8 @@ local `http://localhost`. En donde podemos usar los siguientes endpoints:
 | ------------------------- | ------------------------------ | ------------------------------------------------------------------------- |
 | http://localhost/register | `POST`                         | Registra un nuevo usuario                                                 |
 | http://localhost/auth     | `POST`                         | Obtiene un token de acceso con las credenciales de un usuario registrado. |
-| http://localhost/store    | `GET`, `POST`,`PUT`, `DELETE`, | Crud de S                                                                 |
-
-tores.
-http://localhost/item | `GET`, `POST`,`PUT`, `DELETE`,| Crud de Items.
+| http://localhost/store    | `GET`, `POST`,`PUT`, `DELETE`, | Crud de Stores.                                                           |
+| http://localhost/item     | `GET`, `POST`,`PUT`, `DELETE`, | Crud de Items.                                                            |
 
 ## Caracteristicas
 
